@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, NavLink, Redirect } from 'react-router-dom';
 import './App.css';
 
 import Home from './components/Home';
@@ -61,7 +61,9 @@ function App() {
         
         <Switch>
           <Route exact path="/">
-            <Home />
+            <Home
+              isAuth={isAuth}
+            />
           </Route>
 
           { isAuth ? (

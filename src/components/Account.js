@@ -123,7 +123,6 @@ export default function Account({ loggedInStatus, isAuth }) {
 
     }
   }
-  
   return (
     <div className="page-wrap">
       { isAuth ? <Redirect to="/" /> : null }
