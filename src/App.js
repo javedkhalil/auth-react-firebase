@@ -2,19 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from 'react-router-dom';
 import './App.css';
 
-import Home from './components/Home'
-import Account from './components/Account'
-import Dashboard from './components/Dashboard'
+import Home from './components/Home';
+import Account from './components/Account';
+import Dashboard from './components/Dashboard';
 
 function App() {
-  const [ isAuth, setIsAuth ] = useState(false); 
+  const [ isAuth, setIsAuth ] = useState(false);
   
   useEffect(() => {
     // check loggedin user
     if(localStorage.token) {
       setIsAuth(true);
-    }  
+    }
+    checkAuthTimeOut();
   }, [])
+
+  const checkAuthTimeOut = () => {
+    let currentDateTime = new Date();
+    if(Date.parse(localStorage.expiryDateTime) < Date.parse(currentDateTime)) {
+      logOut();
+    }
+  }
 
   const loggedInStatus = (action) => {
     if(localStorage.token && action === true) {
@@ -23,10 +31,13 @@ function App() {
   }
 
   const logOut = (e) => {
-    e.preventDefault();
+    if (e) { e.preventDefault(); }
     localStorage.removeItem("token");
     localStorage.removeItem("localID");
     localStorage.removeItem("expiry");
+    localStorage.removeItem("email");
+    localStorage.removeItem("expiryDateTime");
+    localStorage.removeItem("expirySeconds");
     setIsAuth(prevState => !prevState)
   }
 
@@ -34,7 +45,7 @@ function App() {
     <Router>
       {/* if logged in - go to dashboard - else - homepage */}
       { isAuth ? <Redirect to="/dashboard" /> : <Redirect to="/" /> }
-      <div className="App">
+      <div className="App" onClick={ checkAuthTimeOut }>
         <div className="header">
           <div className="logo">
             <Link to="/">SiteName</Link>

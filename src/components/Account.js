@@ -63,8 +63,12 @@ export default function Account({ loggedInStatus, isAuth }) {
           // console.log(response.data.localId);
   
           localStorage.setItem("token", response.data.idToken);	
-          localStorage.setItem("expiry", response.data.expiresIn);
+          localStorage.setItem("expirySeconds", response.data.expiresIn);
           localStorage.setItem("localID", response.data.localId);
+          localStorage.setItem("email", response.data.email);
+          // add expiry seconds in current date time and store that too
+          let expirationDateTime = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+          localStorage.setItem("expiryDateTime", expirationDateTime);
   
           // clear fields
           setEmail('');
